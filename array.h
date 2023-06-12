@@ -27,12 +27,159 @@ public:
     ~Array();//destructor
     Array& operator=(const Array& tab);//copy assignment
     
+    
+    Array operator+ (const Array& tab);
+    Array operator- (const Array& tab);
+    Array operator* (const Array& tab);
+    Array operator/ (const double& c );
+    Array operator+=(const Array& tab);
+    Array operator-=(const Array& tab);
+    bool  operator==(const Array& tab);
+    
+    Array transpose ();
+    double trace();
+    
+    void setCoef(int i,int j, double val);
+    double getCoef(int i, int j);
+    
     void display(const char*name);
     
 private:
     void allocArrays();//method to allocate the array x and the x[i] arrays
 
 };
+
+
+
+
+
+double Array::trace()
+{
+    assert(m==n);
+    double s(0.0);
+    for(int i=0;i<m;i++){
+        for(int j=0;j<n;j++){
+            if(i == j){
+                s += x[i][i];
+            }            
+        }        
+    }
+    return s;
+}
+
+
+void Array::setCoef(int i, int j, double val)
+{
+    assert(i<m);assert(j<n); 
+    x[i][j] = val;
+}
+double Array::getCoef(int i, int j)
+{
+    assert(i<m);assert(j<n);
+    return x[i][j];
+}
+
+
+
+Array Array::transpose()
+{
+    Array t(n,m);
+    for(int i=0;i<m;i++){
+        for(int j=0;j<n;j++){
+            t.x[j][i] = x[i][j];
+        }
+    }
+    return t;
+}
+
+
+Array Array::operator+(const Array& tab)
+{ 
+    Array tmp(tab.m,tab.n);
+    for(int i=0;i<m;i++){
+        for(int j=0;j<n;j++){
+            tmp.x[i][j] = x[i][j] + tab.x[i][j];
+        }
+    }
+    return tmp;
+}
+
+Array Array::operator-(const Array& tab)
+{ 
+    Array tmp(tab.m,tab.n);
+    for(int i=0;i<m;i++){
+        for(int j=0;j<n;j++){
+            tmp.x[i][j] = x[i][j] - tab.x[i][j];
+        }
+    }
+    return tmp;
+}
+
+Array Array::operator*(const Array& tab)
+{
+    assert(n==tab.m);
+    Array tmp(tab.m,tab.n);
+    for(int i=0;i<m;i++){        
+        for(int j=0;j<n;j++){            
+            double s(0.0);
+            for(int k=0;k<tab.m;k++){
+                s += x[i][k]*tab.x[k][j];
+            }
+            tmp.setCoef(i,j,s);  
+        }        
+    }
+    return tmp;
+}
+
+Array Array::operator/(const double& c)
+{
+    assert(c != 0);
+    Array tmp(m,n);
+    for(int i=0;i<m;i++){
+        for(int j=0;j<n;j++){
+            tmp.x[i][j] = x[i][j]/c;
+        }
+    }
+    return tmp;
+}
+
+bool Array::operator==(const Array& tab)
+{
+    bool test = true;
+    for(int i=0;i<m;i++){
+        for(int j=0;j<n;j++){
+            if(x[i][j] != tab.x[i][j]){
+                test = false;
+                break;
+            }
+        }
+    }
+
+    return test;
+}
+
+
+
+
+Array Array::operator+=(const Array& tab)
+{
+    for(int i=0;i<m;i++){
+        for(int j=0;j<n;j++){
+           x[i][j] += tab.x[i][j];
+        }
+    }
+    return(*this);
+}
+
+Array Array::operator-=(const Array& tab)
+{
+    for(int i=0;i<m;i++){
+        for(int j=0;j<n;j++){
+           x[i][j] -= tab.x[i][j];
+        }
+    }
+    return(*this);
+}
 
 
 
