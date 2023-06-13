@@ -13,6 +13,7 @@
 #include <iostream>
 #include <string>
 #include <cassert>
+#include "math.h"
 
 
 
@@ -31,10 +32,12 @@ public:
     Array operator+ (const Array& tab);
     Array operator- (const Array& tab);
     Array operator* (const Array& tab);
+    Array operator* (const double& c );
     Array operator/ (const double& c );
     Array operator+=(const Array& tab);
     Array operator-=(const Array& tab);
     bool  operator==(const Array& tab);
+    double& operator()(int i,int j);
     
     Array transpose ();
     double trace();
@@ -42,7 +45,10 @@ public:
     void setCoef(int i,int j, double val);
     double getCoef(int i, int j);
     
-    void display(const char*name);
+    void display(const std::string& name);
+    
+    Array comat(int io, int jo);//matrice dont on a supprime la ieme ligne(io) et la jeme colonne(jo)
+    double det();
     
 private:
     void allocArrays();//method to allocate the array x and the x[i] arrays
@@ -50,7 +56,74 @@ private:
 };
 
 
+Array Array::operator*(const double& c)
+{
+    Array tmp(m,n);
+    for(int i=0;i<m;i++){
+        for(int j=0;j<n;j++){
+            tmp.x[i][j] = c*x[i][j];
+        }
+    }
+    return tmp;    
+}
 
+
+
+
+double Array::det()
+{
+    // Developpement du determinant par la formule des cofacteurs
+    int io = 0;//on developpe par rapport a la 1ere ligne de la sous-matrice.
+    
+    Array A(m,n),coMat(m-1,n-1),cofact(m-1,n-1),delta_ioj(m-1,n-1),A_ioj(m-1,n-1);
+    double a_ioj, d = 0.0; 
+    if(m==1){
+        return this->x[0][0];
+    }else{
+        //recursivite
+        for(int j=0;j<n;j++){
+            delta_ioj = this->comat(io,j);
+            A_ioj = delta_ioj.operator*(pow(-1,io+j));
+            
+            a_ioj = this->getCoef(io,j);
+            d += a_ioj*(A_ioj.det());
+
+        }
+
+        
+    }
+    return d;
+}
+
+
+Array Array::comat(int io, int jo)
+{
+    assert(m == n);//matrice carree de taille m
+    Array comat(m-1,n-1), delta(m-1,n-1);
+    int k(0),l;
+    for(int i=0;i<m;i++){
+        if(i != io){            
+            l = 0;
+            for(int j=0;j<n;j++){
+                if(j != jo){
+                    double val = this->getCoef(i,j);
+                    delta.x[k][l] = val;                    
+                    l++;
+                }
+            }            
+            k++;
+        }        
+    }
+    comat = delta;
+    return comat;    
+}
+
+
+double & Array::operator()(int i, int j)
+{
+    assert(i<m);assert(j<n);
+    return x[i][j];
+}
 
 
 double Array::trace()
@@ -184,7 +257,7 @@ Array Array::operator-=(const Array& tab)
 
 
 
-void Array::display(const char* name)
+void Array::display(const std::string& name)
 {
     std::cout << "\n\t" << std::endl;
     std::cout << name << std::endl;

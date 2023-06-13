@@ -1,5 +1,6 @@
 #include "array.h"
 #include <iostream>
+#include <vector>
 
 using namespace std;
 
@@ -9,7 +10,7 @@ using namespace std;
 int main(){
     cout << "\n\ttests MEF 2D..." << endl;
 
-    Array *mat = new Array[6];
+    
     Array A(2,3),B(A),C,D(3,3),E(A),tE,F,G(2,2),H(G),I(2,2),J(I);
     A.setCoef(1,2,-10.);
     A.display("A");
@@ -50,6 +51,46 @@ int main(){
     N = I;
     cout << I.operator==(J) << endl;
     cout << I.operator==(N) << endl;
+    cout << L(0,1) << endl;
+    
+    
+    cout << "-------------" << endl;
+    typedef Array Matrix;
+    Matrix matA(3,3),matB(3,3),comatA, matC(matB),matD(4,4);
+    
+    matA(0,0)=1;matA(0,1)=-3;matA(0,2)=5;
+    matA(1,0)=-8;matA(1,1)=10;matA(1,2)=2;
+    matA(2,0)=4;matA(2,1)=1;matA(2,2)=-7;
+    
+    vector<Matrix> vMat;
+    vMat.push_back(matA);
+    vMat.push_back(matB);
+ 
+    int k = 0;
+    for(auto mat:vMat){
+        std::string is = to_string(k);
+        mat.display(is);
+        k++;
+    }
+    
+    comatA = matA.comat(2,0);
+    comatA.display("comatA(2,0)");
+    
+    cout << comatA.det() << endl;
+    cout << matA.det() << endl;
+    
+    matC(0,0)=1;matC(0,1)=1;matC(0,2)=1;
+    matC(1,0)=1;matC(1,1)=1;matC(1,2)=1;
+    matC(2,0)=1;matC(2,1)=1;matC(2,2)=1;
+    cout << matC.det() << endl;
+    
+    
+    matD(0,0)=5;matD(0,1)=1;matD(0,2)=2;matD(0,3)=7;
+    matD(1,0)=3;matD(1,1)=0;matD(1,2)=0;matD(1,3)=2;
+    matD(2,0)=1;matD(2,1)=3;matD(2,2)=4;matD(2,3)=5;
+    matD(3,0)=2;matD(3,1)=0;matD(3,2)=0;matD(3,3)=3;
+    matD.display("matD");
+    cout << matD.det() << endl;
     
     
     
