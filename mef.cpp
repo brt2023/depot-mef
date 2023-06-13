@@ -37,7 +37,7 @@ int main(){
     H -= G;
     H.display("H");
     I.setCoef(0,0,1);I.setCoef(0,1,1);
-    I.setCoef(1,0,0);I.setCoef(1,1,1);
+    I.setCoef(1,0,-1);I.setCoef(1,1,2);
     I.display("I");
     J = I*I;
     J.display("J");
@@ -79,10 +79,11 @@ int main(){
     cout << comatA.det() << endl;
     cout << matA.det() << endl;
     
-    matC(0,0)=1;matC(0,1)=1;matC(0,2)=1;
+    matC(0,0)=2;matC(0,1)=1;matC(0,2)=3;
     matC(1,0)=1;matC(1,1)=1;matC(1,2)=1;
-    matC(2,0)=1;matC(2,1)=1;matC(2,2)=1;
+    matC(2,0)=0;matC(2,1)=0;matC(2,2)=1;
     cout << matC.det() << endl;
+    matC.inv().display("inv(C)");
     
     
     matD(0,0)=5;matD(0,1)=1;matD(0,2)=2;matD(0,3)=7;
@@ -91,6 +92,16 @@ int main(){
     matD(3,0)=2;matD(3,1)=0;matD(3,2)=0;matD(3,3)=3;
     matD.display("matD");
     cout << matD.det() << endl;
+    
+    // matrice inverse
+    matD.inv().display("inv(matD)");
+    
+    I.inv().display("inv(I)");
+    Array inv_I(2,2),Id;
+    inv_I = I.inv();
+    Id = I*inv_I;
+    Id.display("Id = I*inv(I)");
+
     
     
     

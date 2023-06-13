@@ -50,10 +50,40 @@ public:
     Array comat(int io, int jo);//matrice dont on a supprime la ieme ligne(io) et la jeme colonne(jo)
     double det();
     
+    Array inv();//matrice inverse
+    
 private:
     void allocArrays();//method to allocate the array x and the x[i] arrays
 
 };
+
+
+/*
+ * Inverse d'une matrice
+ */
+Array Array::inv()
+{
+    Array tmp(m,n),coMat(m,n);
+    Array delta_ij(m-1,n-1),A_ij(m-1,n-1);
+    assert(this->det() != 0.0);
+    if(m==1){
+        double val = this->getCoef(0,0);
+        coMat.setCoef(0,0,val);
+    }else{
+        //recursivite
+        for(int i=0;i<m;i++){
+            for(int j=0;j<n;j++){
+                delta_ij = this->comat(i,j);
+                A_ij = delta_ij.operator*(pow(-1,i+j)); 
+                double val = A_ij.det();
+                coMat.setCoef(i,j,val);
+            }
+        }        
+    }
+    tmp = coMat.transpose().operator/(this->det());
+    return tmp;
+}
+
 
 
 Array Array::operator*(const double& c)
@@ -83,14 +113,10 @@ double Array::det()
         //recursivite
         for(int j=0;j<n;j++){
             delta_ioj = this->comat(io,j);
-            A_ioj = delta_ioj.operator*(pow(-1,io+j));
-            
+            A_ioj = delta_ioj.operator*(pow(-1,io+j));            
             a_ioj = this->getCoef(io,j);
             d += a_ioj*(A_ioj.det());
-
-        }
-
-        
+        }        
     }
     return d;
 }
