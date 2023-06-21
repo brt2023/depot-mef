@@ -1,6 +1,9 @@
 #include "array.h"
 #include <iostream>
+#include <fstream>
 #include <vector>
+
+
 
 using namespace std;
 
@@ -101,8 +104,21 @@ int main(){
     inv_I = I.inv();
     Id = I*inv_I;
     Id.display("Id = I*inv(I)");
-
     
+    /*
+     * 
+     */
+        /*
+     * Affichage des resultats
+     */
+    
+//     std::filebuf fb;
+//     fb.open ("results.txt",std::ios::out);
+//     std::ostream os(&fb);
+//     os << A << "," << B << "," << C << "," << D << "\n";
+
+//     std::ofstream ff("tests_comatA.txt");
+//     comatA.sauvegarde(ff);
     
     
     return 0;

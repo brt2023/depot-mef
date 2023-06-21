@@ -11,6 +11,7 @@
  ***************************************************************************/
 
 #include <iostream>
+#include <fstream>
 #include <string>
 #include <cassert>
 #include "math.h"
@@ -38,6 +39,7 @@ public:
     Array operator-=(const Array& tab);
     bool  operator==(const Array& tab);
     double& operator()(int i,int j);
+
     
     Array transpose ();
     double trace();
@@ -52,10 +54,17 @@ public:
     
     Array inv();//matrice inverse
     
+   
+
+    
 private:
     void allocArrays();//method to allocate the array x and the x[i] arrays
 
 };
+
+
+
+
 
 
 /*
