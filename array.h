@@ -39,6 +39,7 @@ public:
     Array operator-=(const Array& tab);
     bool  operator==(const Array& tab);
     double& operator()(int i,int j);
+    double operator,(const Array& tab);
 
     
     Array transpose ();
@@ -63,6 +64,18 @@ private:
 };
 
 
+
+/*
+ * dot product (produit scalaire)
+ */
+double Array::operator,(const Array& tab)
+{
+    double dotProduct(0.0);
+    for(int i=0;i<3;i++){
+        dotProduct += x[i][0]*tab.x[i][0];      
+    }
+    return dotProduct;    
+}
 
 
 

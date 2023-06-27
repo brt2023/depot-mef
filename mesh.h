@@ -15,6 +15,9 @@ typedef double dble;
 
 
 
+// [Kel, Mel, V_rotV_x_el,V_rotV_y_el] = mat_elem(S1, S2, S3)
+
+
 
 
 
@@ -171,6 +174,8 @@ public:
     }
     
 };/*END class Triangle */
+
+
 void Triangle::set(Vertex* v0, int i, int iA, int iB, int iC, int j)
 {
     dble c = 0.5;
@@ -232,12 +237,11 @@ Mesh::Mesh(const char * filename)
     for(int k=0;k<nbs;k++){
         f >> vertices[k];
         vv.push_back(vertices[k]);
-        vertices[k].display();
+//         vertices[k].display();
         Coorneu.setCoef(k,0,vertices[k].p.x);Coorneu.setCoef(k,1,vertices[k].p.y);Refneu.setCoef(k,0,vertices[k].neb);
     }
     
-    std::cout << "\n-------------------------------------------------------------------\n";
-    
+   
     /* definitions des tableaux "a la facon MATLAB+ M2S ENSTA MEF" */
     Array Numtri(nbt,3),Reftri(nbt,1);
 
@@ -255,9 +259,23 @@ Mesh::Mesh(const char * filename)
     for(int l=0;l<nbt;l++){        
         //...boucle sur les domaines... 
         //calcul des matrices elentaires Kel,Mel
-        std::cout << "triangle " << l << std::endl;
+//         std::cout << "triangle " << l << std::endl;
         Array Kel(3,3),Mel(3,3);
-        double c = triangle[l].area;     
+        double c = triangle[l].area;
+        
+        
+        int S1 = Numtri.getCoef(l,0);//numero du sommet 0 du triangle l eauivalent a I ou J (voir suite)
+        int S2 = Numtri.getCoef(l,1);//numero du sommet 1 du triangle l
+        int S3 = Numtri.getCoef(l,2);//numero du sommet 2 du triangle l
+//         std::cout << l << "," << S1 << "," << S2 << "," << S3 << std::endl;
+        double x1 = Coorneu.getCoef(S1,0);double y1 = Coorneu.getCoef(S1,1);
+        double x2 = Coorneu.getCoef(S2,0);double y2 = Coorneu.getCoef(S2,1);
+        double x3 = Coorneu.getCoef(S3,0);double y3 = Coorneu.getCoef(S3,1);
+//         std::cout << ",x1=" << x1 << ",x2=" << x2 << ",x3=" << x3 << std::endl;
+//         std::cout << ",y1=" << y1 << ",y2=" << y2 << ",y3=" << y3 << std::endl;
+       
+        
+        
         
         for(int i=0;i<3;i++){
             //numero global
@@ -273,20 +291,40 @@ Mesh::Mesh(const char * filename)
                 //numero global
                 J = Numtri.getCoef(l,j);
                 Mel(i,j) = Mel(i,j)*c;
-
+                /* 3-ASSEMBLAGE DES MATRICES GLOBALES */
                 MM(I,J) += Mel(i,j);//Assemblage de la matrice MASSE
+
+
+                Array a(3,1),b(3,1);//cf cours ENS Cachan (TD MEF M2S)
+                a(0,0) = y2-y3;b(0,0) = -x2+x3;
+                a(1,0) = y3-y1;b(1,0) = -x3+x1;
+                a(2,0) = y1-y2;b(2,0) = -x1+x2;
+                
+                a = a.operator/(2*c); b = b.operator/(2*c);
+                double a_dot_b = a.operator,(b);//dot product (produit scalaire entre a et b
+                Kel.setCoef(i,j,a_dot_b);
+                Kel(i,j) = Kel(i,j)/(4*c);
+                /* 3-ASSEMBLAGE DES MATRICES GLOBALES */
+                KK(I,J) += Kel(i,j);
+
             }
-        }
+        }//fin calcul matrice MASSE: MM // RAIDEUR: KK
     }
-    MM.display("MM");
+    
+    /*  Affichage des matrices globales */
+    // MASSE
+//     MM.display("MM");//Affichage
+    // RAIDEUR
+//     KK.display("KK");
     
     
         
-    /* 3-ASSEMBLAGE DES MATRICES GLOBALES */
+    
     /* 4-CONSTITUTION DU 2ND MEMBRE */
     /* 5-ELIMINATION DES CONDITIONS ESSENTIELLES (s'il y en a) */
     /* 6-RESOLUTION DU SYSTEME LINEAIRE */
     /* 7-POST-TRAITEMENTS NUMERIQUES et/ou GRAPHIQUES */
+    std::cout << "\n\n\t--- Traitements numeriques: OK ---" << std::endl;
 
 
 } //END class Mesh

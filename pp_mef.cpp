@@ -19,6 +19,9 @@ int main(){
     cout << "\n\t\tResolution par la MEF 2D" << endl;
     cout << "\t\t------------------------\n" << endl;
     
+    
+    std::cout << "\n START TESTS mesh class." << "\n\n";
+    
     const char* filename = "data.txt";//"maillage60.txt";
     Mesh msh(filename);
     
@@ -35,8 +38,8 @@ int main(){
         os_msh << "aire(" << k+1 << ")=" << msh.triangle[k].area << "\n";
         aire += msh.triangle[k].area;
     }
-    std::cout << "Somme de toutes les aires = " << aire << std::endl;
-    os_msh << "Somme des aires = " << aire ;
+//     std::cout << "Somme de toutes les aires = " << aire << std::endl;
+//     os_msh << "Somme des aires = " << aire ;
     
     std::cout << "\n END TESTS mesh class." << "\n\n\n\n\n";
     std::cout << "////////////////////////////////////////////////////////////" << std::endl;
@@ -80,6 +83,7 @@ int main(){
      */  
     vector<R2>vR2;
     R2 A,B(1,0),C(1,1),D(0,1),E(C),F,G,H,I;
+    
     vR2.push_back(A);
     vR2.push_back(B);
     vR2.push_back(C);

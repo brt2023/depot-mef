@@ -8,4 +8,3 @@ aire(1)=0.2
 aire(2)=0.45
 aire(3)=0.3
 aire(4)=0.05
-Somme des aires = 1
