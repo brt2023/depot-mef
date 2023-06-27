@@ -9,6 +9,7 @@
 #include <vector>
 #include <limits>
 #include <cassert>
+#include "array.h"
 
 typedef double dble;
 
@@ -149,6 +150,12 @@ void Vertex::display()
 
 
 
+
+
+
+
+
+
 /********** class Triangle **********/
 class Triangle:public Label{
 public:
@@ -200,6 +207,7 @@ public:
 Mesh::Mesh(const char * filename)
 {
     /*
+     * 1-GENERATION du MAILLAGE
      * lecture maillage
      */
     std::ifstream f(filename);
@@ -215,6 +223,8 @@ Mesh::Mesh(const char * filename)
     std::cout << "nbre de sommet   (nbs) = " << nbs << std::endl;
     std::cout << "nbre de triangle (nbt) = " << nbt << std::endl;
     
+    Array Coorneu(nbs,2), Refneu(nbs,1);
+    
     // lecture des vertex...FIXME
     vertices = new Vertex[nbs];
     triangle = new Triangle[nbt];
@@ -223,20 +233,63 @@ Mesh::Mesh(const char * filename)
         f >> vertices[k];
         vv.push_back(vertices[k]);
         vertices[k].display();
+        Coorneu.setCoef(k,0,vertices[k].p.x);Coorneu.setCoef(k,1,vertices[k].p.y);Refneu.setCoef(k,0,vertices[k].neb);
     }
     
     std::cout << "\n-------------------------------------------------------------------\n";
+    
+    /* definitions des tableaux "a la facon MATLAB+ M2S ENSTA MEF" */
+    Array Numtri(nbt,3),Reftri(nbt,1);
 
     int nt, iA, iB, iC, nebt;
     for(int i=0;i<nbt;i++){
         f >> nt >> iA >> iB >> iC >> nebt;
         triangle[i].set(vertices, nt, iA-1, iB-1, iC-1, nebt);
-        std::cout << nt << " " << iA-1 << " " << iB-1 << " " << iC-1 << " " << nebt << std::endl;
+        Numtri.setCoef(i,0,iA-1); Numtri.setCoef(i,1,iB-1); Numtri.setCoef(i,2,iC-1); Reftri.setCoef(i,0,nebt-1);
         area += triangle[i].area;
     }
 
+    /* 2-FABRICATION DES MATRICES ELEMENTAIRES */
+    Array KK(nbs,nbs),MM(nbs,nbs);//matrice rigidite et masse (INIT.)
+    int I,J;
+    for(int l=0;l<nbt;l++){        
+        //...boucle sur les domaines... 
+        //calcul des matrices elentaires Kel,Mel
+        std::cout << "triangle " << l << std::endl;
+        Array Kel(3,3),Mel(3,3);
+        double c = triangle[l].area;     
+        
+        for(int i=0;i<3;i++){
+            //numero global
+            I = Numtri.getCoef(l,i);
+            
+            for(int j=0;j<3;j++){                
+                if(i == j){
+                    Mel(i,i) = (1./6.0);
+                }else{
+                    Mel(i,j) = (1./12.0);
+                }              
+  
+                //numero global
+                J = Numtri.getCoef(l,j);
+                Mel(i,j) = Mel(i,j)*c;
 
-}
+                MM(I,J) += Mel(i,j);//Assemblage de la matrice MASSE
+            }
+        }
+    }
+    MM.display("MM");
+    
+    
+        
+    /* 3-ASSEMBLAGE DES MATRICES GLOBALES */
+    /* 4-CONSTITUTION DU 2ND MEMBRE */
+    /* 5-ELIMINATION DES CONDITIONS ESSENTIELLES (s'il y en a) */
+    /* 6-RESOLUTION DU SYSTEME LINEAIRE */
+    /* 7-POST-TRAITEMENTS NUMERIQUES et/ou GRAPHIQUES */
+
+
+} //END class Mesh
 
 
 

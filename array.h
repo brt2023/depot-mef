@@ -156,7 +156,7 @@ Array Array::comat(int io, int jo)
 
 double & Array::operator()(int i, int j)
 {
-    assert(i<m);assert(j<n);
+    assert(i<=m);assert(j<=n);
     return x[i][j];
 }
 

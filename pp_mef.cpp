@@ -14,6 +14,7 @@ enum DIM{NX0=2,NX1=3,NX2=4,NX3=5,NX4=6};
 
 
 
+
 int main(){
     cout << "\n\t\tResolution par la MEF 2D" << endl;
     cout << "\t\t------------------------\n" << endl;
@@ -27,7 +28,7 @@ int main(){
     os_msh << msh.nbs << "," << msh.nbt << "\n";
     
     for(int k=0;k<msh.nbs;k++){
-        os_msh << msh.vertices[k] << "\n";
+        os_msh << msh.vertices[k] << "\n";        
     }
     dble aire = 0.0;
     for(int k=0;k<msh.nbt;k++){
@@ -48,6 +49,25 @@ int main(){
     R2 AB0(A0,B0), AC0(A0,C0), BC0(B0,C0);
     dble surface0 = AB0^AC0*0.5;
     std::cout << "surface = " << surface0 << std::endl;
+    
+    
+    
+    
+    
+    
+    
+    /*
+     * 
+     * M.E.F 2D (P1 conforme)
+     * 
+     */
+    std::cout << "\n\n\n\n";
+    std::cout << "\t\t\t\tBEGINNING MEF" << std::endl;
+
+    std::cout << "\t\t\t\tENDING    MEF" << std::endl;
+    std::cout << "\n\n\n\n";
+    
+    
     
     
     
