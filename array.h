@@ -55,6 +55,25 @@ public:
     
     Array inv();//matrice inverse
     
+    inline int getSize(){return m*n;}
+    inline int getRowSize(){return m;}
+    inline int getColSize(){return n;}
+    inline void initialize(double val){
+        for(int i=0;i<m;i++){
+            for(int j=0;j<n;j++){
+                x[i][j] = val;
+            }
+        }
+    }
+    inline double normeL2(){
+        assert(n == 1);
+        double s(0.0);
+        for(int i=0;i<m;i++){
+            s += x[i][0]*x[i][0];
+        }
+        return sqrt(s);
+    }
+
    
 
     
@@ -71,7 +90,7 @@ private:
 double Array::operator,(const Array& tab)
 {
     double dotProduct(0.0);
-    for(int i=0;i<3;i++){
+    for(int i=0;i<tab.m;i++){
         dotProduct += x[i][0]*tab.x[i][0];      
     }
     return dotProduct;    
@@ -238,16 +257,16 @@ Array Array::operator-(const Array& tab)
 
 Array Array::operator*(const Array& tab)
 {
-    assert(n==tab.m);
-    Array tmp(tab.m,tab.n);
-    for(int i=0;i<m;i++){        
-        for(int j=0;j<n;j++){            
+    assert(n == tab.m);
+    Array tmp(m,tab.n);
+    for(int i=0;i<m;i++){
+        for(int j=0;j<tab.n;j++){
             double s(0.0);
-            for(int k=0;k<tab.m;k++){
+            for(int k=0;k<n;k++){
                 s += x[i][k]*tab.x[k][j];
             }
-            tmp.setCoef(i,j,s);  
-        }        
+            tmp.x[i][j] = s;
+        }
     }
     return tmp;
 }

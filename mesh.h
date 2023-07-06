@@ -11,6 +11,8 @@
 #include <cassert>
 #include "array.h"
 
+#include "functions.h"
+
 typedef double dble;
 
 
@@ -323,6 +325,57 @@ Mesh::Mesh(const char * filename)
     /* 4-CONSTITUTION DU 2ND MEMBRE */
     /* 5-ELIMINATION DES CONDITIONS ESSENTIELLES (s'il y en a) */
     /* 6-RESOLUTION DU SYSTEME LINEAIRE */
+    
+//     EXEMPLE 1
+    
+    Array A22(2,2),b21(2,1),c21(2,1);
+    A22.setCoef(0,0,2);A22.setCoef(0,1,-1);
+    A22.setCoef(1,0,-1);A22.setCoef(1,1,1);
+    A22.display("A22");
+    
+    b21.setCoef(0,0,1);b21.setCoef(1,0,0);
+    b21.display("b21");
+    
+//     std::cout << "normeL2(b21) = " << b21.normeL2() << std::endl;
+    Array A33(3,3),b31(3,1);
+    A33.setCoef(0,0,4);A33.setCoef(0,1,2);A33.setCoef(0,2,1);
+    A33.setCoef(1,0,-1);A33.setCoef(1,1,2);A33.setCoef(1,2,0);
+    A33.setCoef(2,0,2);A33.setCoef(2,1,1);A33.setCoef(2,2,4);
+    A33.display("A33");
+    
+    b31.setCoef(0,0,4);b31.setCoef(1,0,2);b31.setCoef(2,0,9);
+    b31.display("b31");
+    
+//     c21 = A22*b21;
+//     c21.display("c21");
+    std::cout << "\tResolution systeme lineaire: Ax = b par la methode projective: GC" << std::endl;
+    solve::projective::GC(A33,b31);
+    std::cout << "\n";
+    
+    
+    
+
+    std::cout << "\tResolution systeme lineaire: Ax = b par la methode iterative: JACOBI" << std::endl;
+    solve::iterative::JACOBI(A22,b21);
+    std::cout << "\n";
+    
+    
+//     EXEMPLE 2
+//     Array A23(2,3),b34(3,4),c24(2,4);
+//     
+//     A23.setCoef(0,0,1);A23.setCoef(0,1,-1);A23.setCoef(0,2,3);
+//     A23.setCoef(1,0,3);A23.setCoef(1,1,0);A23.setCoef(1,2,-2);
+//     
+//     b34.setCoef(0,0,3);b34.setCoef(0,1,1);b34.setCoef(0,2,0);b34.setCoef(0,3,-2);
+//     b34.setCoef(1,0,-1);b34.setCoef(1,1,0);b34.setCoef(1,2,3);b34.setCoef(0,3,-1);
+//     b34.setCoef(2,0,0);b34.setCoef(2,1,-4);b34.setCoef(2,2,0);b34.setCoef(0,3,-1);
+//     
+//     c24 = A23*b34;
+    
+    
+    
+    
+
     /* 7-POST-TRAITEMENTS NUMERIQUES et/ou GRAPHIQUES */
     std::cout << "\n\n\t--- Traitements numeriques: OK ---" << std::endl;
 

@@ -7,6 +7,7 @@
 #include <cmath>
 #include <cassert>
 #include <string>
+#include "functions.h"
 
 using namespace std;
 
@@ -54,8 +55,19 @@ int main(){
     std::cout << "surface = " << surface0 << std::endl;
     
     
-    
-    
+    Array x(5,1);
+    x.setCoef(0,0,-4);x.setCoef(1,0,2);x.setCoef(2,0,1);x.setCoef(3,0,0);x.setCoef(4,0,-10);
+    vector<double>vx;
+    vx.push_back(-4);vx.push_back(2);vx.push_back(1);vx.push_back(0);vx.push_back(-10);
+    x.display("x");
+    double aa(-8),bb(7);
+    double valeurMax = MAX(aa,bb);
+    double valeurMin = MIN(aa,bb);
+    std::cout << "\tvaleurMax =" << valeurMax << ", valeurMin = " << valeurMin << "\n";
+    double sommeDesValeursDuVecteur_x;
+    sommeDesValeursDuVecteur_x = sum(x,0,x.getRowSize());
+    std::cout << "\tsomme des valeurs du vecteur x = " << sommeDesValeursDuVecteur_x << "\n";
+
     
     
     
@@ -66,6 +78,7 @@ int main(){
      */
     std::cout << "\n\n\n\n";
     std::cout << "\t\t\t\tBEGINNING MEF" << std::endl;
+    
 
     std::cout << "\t\t\t\tENDING    MEF" << std::endl;
     std::cout << "\n\n\n\n";
